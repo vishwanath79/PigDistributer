@@ -27,10 +27,6 @@ B = FOREACH A GENERATE FLATTEN(REGEX_EXTRACT_ALL(line, '^(.+?)\\-(.+?)\\s(.+?)\\
 --STORE databag INTO 'hdfs://server/databag';
 STORE B into 'DataLoad';
 
--- DataLoad:
---( zzzzmichaelzzzz,dm,20130106,S,C,26)
---( zzzzmichaelzzzz,dm,20130106,S,T,98)
-
 
 -- Split Operational columns 
 Splitter = load 'DataLoad' as (UserID:chararray, Zip:chararray,Date:CHARARRAY, Operation:chararray, Type:chararray, Value:INT);
@@ -49,7 +45,7 @@ C = foreach B {
 }
 
 --Final Output
-STORE C into 'MEDS_HbaseLoad';
+STORE C into 'HbaseLoad';
 --( zzzzmichaelzzzz,dm,20130106,S,98,26)
 
 fs -getmerge HbaseLoad HbaseLoad
