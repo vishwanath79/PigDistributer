@@ -1,4 +1,3 @@
--- DETERMINE THE SOURCE GUIDS IN THE RESPECTIVE % BREAKS AS CALCULATED BY MEDS_Main.pig
 
 rmf X_FilterSourceGuids
 
@@ -31,4 +30,3 @@ STORE SpreadSource into 'X_FilterSourceGuids';
 
 fs -getmerge X_FilterSourceGuids X_FilterSourceGuids
 --RUN NEXT SCRIPT
-RUN 4_MEDS_FinalTargets.pig
