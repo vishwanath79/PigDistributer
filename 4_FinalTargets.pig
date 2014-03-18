@@ -3,9 +3,6 @@
 register 'Iterator.py' using jython as py
 
 
-rmf X_MEDS_Final
-rmf X_MEDS_SummaryStats
-
 -- LOAD % BREAK OF SOURCE GUIDS TBE PLUGGED INTO THE TARGETS 
 SourceGuids = LOAD 'X_FilterSourceGuids' AS (operation:chararray,pg:int,zip:chararray,rank:int,guid:chararray);
 SprayZips = LOAD 'X_FinalTargets' AS (operation1:chararray,pg1:int,zip1:chararray,count:long);
@@ -23,11 +20,10 @@ ranked_zips = RANK SprayZips3;
 -- FINAL OUTPUT
 SpreadTargets = JOIN ranked_users by  ($0,$1), ranked_zips by ($0,$1);
 STORE SpreadTargets INTO 'X_MEDS_Final';
-SpreadTargets2= LOAD 'X_MEDS_Final' as (rank:int,op:chararray,pg:int,source:chararray,count:int,guid:chararray,rank2:int,op2:chararray,pg2:int,targetzip:chararray,count2:int);
+SpreadTargets2= LOAD 'X_Final' as (rank:int,op:chararray,pg:int,source:chararray,count:int,guid:chararray,rank2:int,op2:chararray,pg2:int,targetzip:chararray,count2:int);
 SpreadTargets3 = FOREACH SpreadTargets2 GENERATE ($0,$1,$3,$5,$9);
-STORE SpreadTargets3 INTO 'MEDS_Final';
-fs -getmerge MEDS_Final MEDS_Final
-rmf MEDS_Final
+STORE SpreadTargets3 INTO '_Final';
+
 
 -- SOURCES / NUMBER OF GUIDS
 SpreadTargets4 = FOREACH SpreadTargets3 GENERATE FLATTEN(($0));
@@ -42,5 +38,4 @@ SummaryStats2 = ORDER SpreadTargets8 by source ASC,Cnt DESC;
 
 -- SUMMARY STATS
 SummaryStats = UNION SummaryStats2,SummaryStats1;
-STORE SummaryStats INTO 'X_MEDS_SummaryStats';
-fs -getmerge X_SummaryStats X_MEDS_SummaryStats
+STORE SummaryStats INTO 'X_SummaryStats';
