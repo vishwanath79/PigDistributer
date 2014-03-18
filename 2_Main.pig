@@ -3,26 +3,14 @@
 --PART A CALCULATE AVERAGES,PERFORMANCE GROUPS AND IMBALANCES
 
 --PARAMETERS
---pig -param OPERATIONTYPE='ImapGetFolderOperation' -param  NUMBEROFGUIDS=10000 2_MEDS_Main.pig
+--pig -param OPERATIONTYPE='ImapGetFolderOperation' -param  NUMBEROFGUIDS=10000 2_Main.pig
 
 --SET DEFAULTS
 %default NUMBEROFGUIDS  '.*';
-%default OPERATIONTYPE 'ImapGetFolderOperation';
+%default OPERATIONTYPE 'ImapOperation';
 
 --REMOVE PREVIOUS OUTPUT
 
-rmf X_Sample
-rmf X_UserList
-rmf X_Performance_Groups
-rmf X_Averages
-rmf X_perfgroup
-rmf X_AllGuids
-rmf X_Imbalanced
-rmf SourceGuids
-rmf X_SourceGuids
-rmf X_ImbalancedUsers
-rmf X_FinalTargets
-rmf MEDS_Final
 
 --LOAD CONVERTED DATA
 a = LOAD 'testdataload' USING PigStorage (' ') AS (
@@ -191,12 +179,6 @@ STORE FinalTargets4 INTO 'X_FinalTargets';
 
 
 
---MERGE ALL OUTPUT
-fs -getmerge X_Averages X_Averages
-fs -getmerge X_Imbalanced X_Imbalanced
-fs -getmerge X_FinalTargets X_FinalTargets
-
-
 --RUN NEXT SCRIPT
-RUN 3_MEDS_SourceGuids.pig
+RUN 3_SourceGuids.pig
 
